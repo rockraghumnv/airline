@@ -1,0 +1,6 @@
+{% extends 'users/layout.html' %}
+{% block body%}
+<div>{{request.user.username}}</div>
+<div>{{request.user.email}}</div>
+<div>{{request.user.firstname}}</div>
+{% endblock%}
