@@ -1,6 +1,45 @@
 {% extends 'users/layout.html' %}
-{% block body%}
-<div>{{request.user.username}}</div>
-<div>{{request.user.email}}</div>
-<div>{{request.user.firstname}}</div>
-{% endblock%}
+
+{% block body %}
+<h2>Welcome, {{ request.user.username }}</h2>
+
+<div><strong>Username:</strong> {{ request.user.username }}</div>
+<div><strong>Email:</strong> {{ request.user.email }}</div>
+<div><strong>First Name:</strong> {{ request.user.first_name }}</div>
+
+<!-- Profile Picture -->
+<div style="margin-top: 20px;">
+    <h4>Profile Picture</h4>
+    {% if request.user.profile.profile_picture %}
+    <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" style="width:150px; height:150px; border-radius: 50%;">
+    {% else %}
+    <!-- <a href="{% url 'profile-update' %}">Change Picture</a> -->
+        <p>No profile picture uploaded.</p>
+    {% endif %}
+   
+</div>
+<div style="margin-top: 30px;">
+    <h3>Travel History</h3>
+    {% if travel_history %}
+        <ul>
+            {% for trip in travel_history %}
+                <li>
+                    {{ trip.flight.origin.city }} ({{ trip.flight.origin.code }}) 
+                    to 
+                    {{ trip.flight.destination.city }} ({{ trip.flight.destination.code }}) - 
+                    Duration: {{ trip.flight.duration }} mins
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No flights booked yet.</p>
+    {% endif %}
+</div>
+
+<div style="margin-top: 30px;">
+    <h4>Account Management</h4>
+    <!--<a href="{% url 'profile-update' %}">Change Username</a><br> -->
+    <!-- <a href="{% url 'password_change' %}">Change Password</a> -->
+</div>
+
+{% endblock %}

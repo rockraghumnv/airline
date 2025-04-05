@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'flights',
     'users',
+    'profiles',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,8 +46,8 @@ SESSION_TIMEOUT = 180
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'users.session_middleware.SessionTimeoutMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'users.session_middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -126,3 +127,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/users/login'
