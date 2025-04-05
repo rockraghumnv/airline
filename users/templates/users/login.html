@@ -4,13 +4,27 @@
     {% if message%}
         <div>{{message}}</div>
     {% endif %}
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+            document.querySelector('form').onsubmit = function(event){
+                let uname = document.querySelector('#name').value;
+                let passwd = document.querySelector('#passwd').value;
+                if(!uname || !passwd){
+                    event.preventDefault();
+                    document.querySelector('#Error').innerText = "Enter username and password";
+                }else{
+                    return true;
+                }
+                return false;
+            };
+        });
+
+    </script>
     <form action="{% url 'users:login_view' %}" method="post">
         {% csrf_token %}
-        Username:<input type="text"  name="username"> <br>
-        Password: <input type="password"  name="password"><br>
+        Username:<input id="name" type="text"  name="username"> <br>
+        Password: <input id="passwd" type="password"  name="password"><br>
         <input type="submit" value="submit">
     </form>
-
-    <a href="{% url 'users:logout_view' %}">Logout</a>
-
+    <p id="Error" style="color: red;"></p>
 {% endblock %}

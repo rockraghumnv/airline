@@ -1,8 +1,10 @@
-from django.shortcuts import render,HttpResponseRedirect
+from django.shortcuts import render,HttpResponseRedirect,HttpResponse
 from django.contrib.auth import login,logout,authenticate
 from django.urls import reverse
 
 # Create your views here.
+
+
 
 def index(request):
     if not request.user.is_authenticated:
@@ -12,12 +14,13 @@ def index(request):
 
 def login_view(request):
     if request.method == "POST":
-        username = request.POST['username']
+        username= request.POST['username']
+        request.session['username'] += username
         password = request.POST['password']
-        print(username)
+        print(f"{request.session['username']}")
         print(password)
         
-        user = authenticate(request, username=username,password=password)
+        user = authenticate(request, username=request.session['username'],password=password)
         if user:
             login(request,user)
             return HttpResponseRedirect(reverse('users:index'))

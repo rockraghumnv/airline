@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+SESSION_TIMEOUT = 180
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'users.session_middleware.SessionTimeoutMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
