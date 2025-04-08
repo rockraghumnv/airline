@@ -1,0 +1,68 @@
+{% extends 'flights/layout.html' %}
+{% block body%}
+<form action="{%url 'flights:flight_search'%}" method="post">
+    {% csrf_token %}
+    {{Search_form.origin}}
+    <div id="origin-suggestions" class="suggestions-box"></div>
+    {{Search_form.destination}}
+    <div id="destination-suggestions" class="suggestions-box"></div>
+<input type="submit">Search </input>
+</form>
+
+<style>
+    .suggestions-box {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        max-height: 150px;
+        overflow-y: auto;
+        position: absolute;
+        z-index: 1000;
+    }
+    .suggestions-box div {
+        padding: 5px;
+        cursor: pointer;
+    }
+    .suggestions-box div:hover {
+        background-color: #e0e0e0;
+    }
+    </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded',() =>{
+        const originInput = document.getElementById('id_orgin');
+        const destinationInput = document.getElementById('id_destination');
+
+        const originBox = document.getElementById('origin-suggestions');
+        const destinationBox = document.getElementById('destination-suggestions');
+
+        function handlesuggestions(inputElement,type,suggestionsbox){
+            inputElement.addEventListener('input',() =>{
+               const query_text = inputElement.text;
+
+               if (query.length > 0) {
+                fetch(`/flights/suggestions/?type=${type}&q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionBox.innerHTML = '';
+                        data.results.forEach(item => {
+                            const div = document.createElement('div');
+                            div.textContent = item;
+                            div.onclick = () => {
+                                inputElement.value = item;
+                                suggestionBox.innerHTML = '';
+                            };
+                            suggestionBox.appendChild(div);
+                        });
+                    });
+               }else{
+                suggestionBox.innerHTML = '';
+               }
+            });
+
+        }
+
+        handlesuggestions(originInput,'origin',originBox)
+        handlesuggestions(destinationInput,'destination',destinationBox)
+    })
+</script>    
+{% endblock %}

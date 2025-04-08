@@ -11,11 +11,12 @@ class Airport(models.Model):
 
 class Flights(models.Model):
     origin = models.ForeignKey(Airport, on_delete=models.CASCADE,related_name='departures')
-    destnation = models.ForeignKey(Airport, on_delete=models.CASCADE,related_name='arrivals')
+    destination = models.ForeignKey(Airport, on_delete=models.CASCADE,related_name='arrivals')
     duration = models.IntegerField()
+    flight_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f'{self.origin}, {self.destnation}, {self.duration}'
+        return f'{self.flight_name},{self.origin}, {self.destination}, {self.duration}'
 
 class Passengers(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
