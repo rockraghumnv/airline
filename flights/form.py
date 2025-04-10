@@ -1,4 +1,4 @@
-from django.forms import forms
+from django import forms
 
 class Search_form(forms.Form):
     origin = forms.CharField(label = "From",max_length = 30)

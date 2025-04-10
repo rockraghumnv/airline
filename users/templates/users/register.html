@@ -1,4 +1,10 @@
 {% extends 'users/layout.html' %}
 {% block body%}
-
+    <script>
+        
+    </script>
+    <form action="{% url 'users:register_view' %}">
+        {{Register_form}}
+        <input type="submit" value="Register">
+    </form>
 {% endblock %}

@@ -28,9 +28,8 @@ def flight_search(request,flight_id):
 
     return render(request,'flights/flight_search.html',{'Search_form':Search_form})
 
-@login_required('/login_redirect')
+@login_required('users/login_redirect')
 def book(request,flight_id):
-     print("thd")
      
      if request.method == 'POST':
         try:
@@ -56,12 +55,3 @@ def suggestions(request):
           if dropdown_list:
                return JsonResponse({'results':list(dropdown_list)})
         
-
-def login_redirect(request,flight_id):
-     request.session["flight_id"] = flight_id
-     if request.user.is_authenticated:
-          return redirect("flights:book_flight",flight_id=flight_id)
-     return redirect("/login")
-
-def login(request):
-     pass
