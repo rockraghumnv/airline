@@ -1,7 +1,15 @@
 {% extends 'flights/layout.html' %}
 {% block body%}
 
+{% if message%}
 
-<a href="{% url 'profiles:index'%}">ViewProfile</a>
-<a href="{% url 'flights:index' %}">ViewAllFlights</a>
+    {{message}}
+
+{%endif%}
+
+<form action="{% url 'flights:book_view' flight.id%}" method="post" >
+    {{register_form}}
+    <input type="submit" value="book">
+</form>
+
 {% endblock %}

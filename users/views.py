@@ -26,7 +26,7 @@ def login_view(request):
                 return redirect("profiles:profile_view")
             return HttpResponseRedirect(reverse('flights:book_flight',args=[flight_id]))
         else:
-            return render(request,'uers/login.html',{'message': "invalid Credintials"})
+            return render(request, 'users/login.html', {'message': "Invalid credentials", 'Login_form': Login_form})
     return render(request,'users/login.html',{'Login_form':Login_form})
 
 def logout_view(request):
@@ -36,20 +36,30 @@ def logout_view(request):
 def register_view(request):
     if request.method == "POST":
         form = Register_form(request.POST)
+
         if form.is_valid():
             password = form.cleaned_data["password"]
             password_again = form.cleaned_data["password_again"]
+
             if password != password_again:
-                return redirect("users:login_view",{"message":"Passwords do not match"})
+                return render(request, "users/login.html", {"message": "Passwords do not match", "Login_form": Login_form})
+            
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
             user_check = User.objects.filter(username = username)
+            
             if user_check:
                 return redirect("users:login_view",{"message":"User Alredy Exist"})
-            user = User.objects.create(username=username,password=password,email=email)
+            
+            user = User.objects.create_user(username=username,password=password,email=email)
             login(request,user)
             flight_id = request.session.get("flight_id")
+            
             if flight_id is None:
                 return redirect("profiles:profile_view")
+            
             return HttpResponseRedirect(reverse('flights:book_flight',args=[flight_id]))
-        return render(request,"users/register.html",{"Register_form":Register_form})
+           
+        return render(request,"users/register.html",{"Register_form":Register_form,"message":"invalid form"})
+    
+    return render(request,"users/register.html",{"Register_form":Register_form})

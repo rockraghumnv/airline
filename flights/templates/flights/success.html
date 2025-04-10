@@ -1,5 +1,6 @@
-{% extends 'flights/layout.html '%}
-
+{% extends 'flights/layout.html' %}
 {% block body%}
-
-{% endblock %}
+    {% if message %}
+        {{message}}
+    {% endif %}
+{% endbody %}
