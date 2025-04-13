@@ -29,7 +29,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded',() =>{
-        const originInput = document.getElementById('id_orgin');
+        const originInput = document.getElementById('id_origin');
         const destinationInput = document.getElementById('id_destination');
 
         const originBox = document.getElementById('origin-suggestions');
@@ -37,25 +37,25 @@
 
         function handlesuggestions(inputElement,type,suggestionsbox){
             inputElement.addEventListener('input',() =>{
-               const query_text = inputElement.text;
+               const query = inputElement.value;
 
                if (query.length > 0) {
                 fetch(`/flights/suggestions/?type=${type}&q=${query}`)
                     .then(response => response.json())
                     .then(data => {
-                        suggestionBox.innerHTML = '';
+                        suggestionsbox.innerHTML = '';
                         data.results.forEach(item => {
                             const div = document.createElement('div');
                             div.textContent = item;
                             div.onclick = () => {
                                 inputElement.value = item;
-                                suggestionBox.innerHTML = '';
+                                suggestionsbox.innerHTML = '';
                             };
-                            suggestionBox.appendChild(div);
+                            suggestionsbox.appendChild(div);
                         });
                     });
                }else{
-                suggestionBox.innerHTML = '';
+                suggestionsbox.innerHTML = '';
                }
             });
 

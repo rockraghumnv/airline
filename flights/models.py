@@ -13,13 +13,13 @@ class Flights(models.Model):
     origin = models.ForeignKey(Airport, on_delete=models.CASCADE,related_name='departures')
     destination = models.ForeignKey(Airport, on_delete=models.CASCADE,related_name='arrivals')
     duration = models.IntegerField()
-    flight_name = models.CharField(max_length=50)
+    flight_name = models.CharField(max_length=50,default="NO FLIGHTS")
 
     def __str__(self):
         return f'{self.flight_name},{self.origin}, {self.destination}, {self.duration}'
 
 class Passengers(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,default=2)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=20)
     flights = models.ManyToManyField(Flights,blank=True,related_name='passengers')

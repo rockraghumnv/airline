@@ -3,7 +3,7 @@ from .models import *
 # Register your models here.
 
 class Flightadmin(admin.ModelAdmin):
-    list_display = ['id','origin','flight_name','destnation','duration']
+    list_display = ['id','origin','flight_name','destination','duration']
 
 class PassengerAdmin(admin.ModelAdmin):
     filter_horizontal = ('flights',)

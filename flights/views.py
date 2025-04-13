@@ -7,7 +7,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 
-def flight_search(request,flight_id):
+def flight_search(request,flight_id=0):
     if request.method == 'POST':    
         flights = Search_form(request.POST)
         if flights.is_valid():
@@ -28,7 +28,7 @@ def flight_search(request,flight_id):
                 print("internal server error")
                 return HttpResponse(f"No flights with id: {flight_id}")
 
-    return render(request,'flights/flight_search.html',{'Search_form':Search_form})
+    return render(request,'flights/flight_search.html',{'Search_form':Search_form()})
 
 
 @login_required(login_url='users:login_view')
@@ -42,6 +42,9 @@ def book(request,flight_id):
 
         else:
                return render(request,'flights/book.html',{"message":"invalid"})
+
+        if Passengers.objects.filter(user=request.user, flights=flight).exists():
+            return render(request, 'flights/success.html', {"message": "You have already booked this flight."})
 
 
         try:
@@ -62,8 +65,11 @@ def book(request,flight_id):
 
 def suggestions(request):
      if request.method == "GET":
+          print("sdjnl")
           query = request.GET.get('q')
           dropdown_list = Flights.objects.filter(flight_name__istartswith=query).values_list('flight_name', flat=True).distinct()
+          print(dropdown_list)
           if dropdown_list:
                return JsonResponse({'results':list(dropdown_list)})
         
+          return JsonResponse({'results': list(dropdown_list)})
