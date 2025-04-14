@@ -1,7 +1,3 @@
-GitHub Copilot
-Fetched 2 web pages
-
-Based on best practices for writing a README file, here is a draft for your Django project:
 
 Airline Reservation System
 This is a Django-based web application for managing airline reservations. It allows users to search for flights, book tickets, and manage their profiles.
