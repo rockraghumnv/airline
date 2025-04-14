@@ -2,11 +2,11 @@
 {% block body%}
 <form action="{%url 'flights:flight_search'%}" method="post">
     {% csrf_token %}
-    {{Search_form.origin}}
-    <div id="origin-suggestions" class="suggestions-box"></div>
-    {{Search_form.destination}}
+    origin: {{Search_form.origin}}
+    <div id="origin-suggestions" class="suggestions-box"></div><br>
+    destination: {{Search_form.destination}}
     <div id="destination-suggestions" class="suggestions-box"></div>
-<input type="submit">Search </input>
+<input type="submit" value="Search"> </input>
 </form>
 
 <style>

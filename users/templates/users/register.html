@@ -3,7 +3,8 @@
     <script>
         
     </script>
-    <form action="{% url 'users:register_view' %}">
+    <form action="{% url 'users:register_view' %}" method="post">
+        {% csrf_token %}        
         {{Register_form}}
         <input type="submit" value="Register">
     </form>

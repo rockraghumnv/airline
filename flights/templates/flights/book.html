@@ -7,7 +7,14 @@
 
 {%endif%}
 
-<form action="{% url 'flights:book_view' flight.id%}" method="post" >
+{{flight.flight_id}}
+{{flight.flight_name}}
+{{flight.origin}} TO
+{{flight.destination}}
+{% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+{% endif %}
+<form action="{% url 'flights:book' %}" method="post" >
     {{register_form}}
     <input type="submit" value="book">
 </form>

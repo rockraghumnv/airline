@@ -3,9 +3,16 @@
 <h1>List of all flights</h1>
 {% for flight in flights %}
 <li>
-    {{flight.id}}-{{flight.flight_name}}
-    {{flight.origin}} to {{flight.destnation}}
-    <a href="{% url 'flights:book' flight.id %}" class="btn-book"></a>
+    {{flight.id}}--{{flight.flight_name}}
+    {{flight.origin}} to {{flight.destination}}
+    <form action="{% url 'flights:book' %}" method="POST" class="book-form">
+        {% csrf_token %}
+        <input type="hidden" name="flight_id" value="{{ flight.id }}">
+        <input type="hidden" name="flight_name" value="{{ flight.flight_name }}">
+        <input type="hidden" name="origin" value="{{ flight.origin }}">
+        <input type="hidden" name="destination" value="{{ flight.destination }}">
+        <button type="submit" class="btn-book">Book</button>
+    </form>
 </li>
 {% endfor%}
 {%endblock%}

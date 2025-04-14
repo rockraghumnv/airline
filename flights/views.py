@@ -7,41 +7,52 @@ from django.http import JsonResponse
 
 # Create your views here.
 
-def flight_search(request,flight_id=0):
+def flight_search(request):
     if request.method == 'POST':    
         flights = Search_form(request.POST)
         if flights.is_valid():
-             origin =flights.cleaned_data["origin"]
-             destination = flights.cleaned_data["destination"]
+            origin = flights.cleaned_data["origin"]
+            destination = flights.cleaned_data["destination"]
 
-             request.session["origin"] = origin
-             request.session["destination"] = destination
 
-        try:
-            flights_list = Flights.objects.filter(origin=origin, destination=destination)
-            if not flights_list.exists():
+            # Extract the ID part from the concatenated string (e.g., 'china,2')
+            try:
+                origin_id = int(origin.split(',')[-1])
+                destination_id = int(destination.split(',')[-1])
+            except (ValueError, IndexError):
+                return render(request, 'flights/flight_list.html', {'message': 'Invalid origin or destination format'})
+
+            request.session["origin"] = origin_id
+            request.session["destination"] = destination_id
+
+            try:
+                flights_list = Flights.objects.filter(origin=origin_id, destination=destination_id)
+                if not flights_list.exists():
                     return render(request, 'flights/flight_list.html', {'message': 'No flights found'})
-            
-            return render(request,'flights/flight_list.html',{'flights':flights_list})
-            
-        except Flights.DoesNotExist:
-                print("internal server error")
-                return HttpResponse(f"No flights with id: {flight_id}")
 
-    return render(request,'flights/flight_search.html',{'Search_form':Search_form()})
+                return render(request, 'flights/flight_list.html', {'flights': flights_list})
+
+            except Flights.DoesNotExist:
+                print("internal server error")
+                return HttpResponse(f"No flights")
+
+    return render(request, 'flights/flight_search.html', {'Search_form': Search_form()})
 
 
 @login_required(login_url='users:login_view')
-def book(request,flight_id):
+def book(request):
+
      if request.method == 'POST':
         form = Book_form(request.POST)
 
         if form.is_valid():
             firstname =  form.cleaned_data["firstname"]    
-            lastname = form.cleaned_data["lastname"]   
+            lastname = form.cleaned_data["lastname"]
 
         else:
-               return render(request,'flights/book.html',{"message":"invalid"})
+           flight_id = request.POST.get('flight_id')
+           flight = Flights.objects.get(pk=flight_id)
+           return render(request,'flights/book.html',{"flight":flight,'register_form':Book_form})
 
         if Passengers.objects.filter(user=request.user, flights=flight).exists():
             return render(request, 'flights/success.html', {"message": "You have already booked this flight."})
@@ -61,13 +72,12 @@ def book(request,flight_id):
         except Passengers.DoesNotExist:
              return HttpResponse("Passengers deos not exist")  
 
-     return render(request,'flights/book.html',{"flight_id":flight_id,'register_form':Book_form})
 
 def suggestions(request):
      if request.method == "GET":
           print("sdjnl")
           query = request.GET.get('q')
-          dropdown_list = Flights.objects.filter(flight_name__istartswith=query).values_list('flight_name', flat=True).distinct()
+          dropdown_list = Airport.objects.filter(city__istartswith=query).values_list('city','id').distinct()
           print(dropdown_list)
           if dropdown_list:
                return JsonResponse({'results':list(dropdown_list)})
