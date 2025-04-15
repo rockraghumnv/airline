@@ -10,13 +10,16 @@ Profile Management: Update user profiles.
 Dynamic Suggestions: Autocomplete suggestions for cities during flight search.
 Installation
 Clone the repository:
+git clone https://github.com/rockraghumnv/airline/
+cd airline
 
-Install dependencies:
+Install dependencies:pip install -r requirements.txt
 
 Apply migrations:
+python manage.py makemigrations
+python manage.py migrate
 
 Run the development server:
-
 Access the application at http://127.0.0.1:8000/.
 
 Usage
