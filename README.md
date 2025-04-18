@@ -14,6 +14,7 @@ Dynamic Suggestions: Autocomplete suggestions for cities during flight search.
 Installation
 Clone the repository:
 git clone https://github.com/rockraghumnv/airline/
+
 cd airline
 
 Install dependencies:pip install -r requirements.txt(this file is being updated)
