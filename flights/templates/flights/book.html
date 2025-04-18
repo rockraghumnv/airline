@@ -15,6 +15,7 @@
     <p style="color: red;">{{ error_message }}</p>
 {% endif %}
 <form action="{% url 'flights:book' %}" method="post" >
+    {% csrf_token %}
     {{register_form}}
     <input type="submit" value="book">
 </form>

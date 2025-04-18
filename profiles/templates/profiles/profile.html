@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<header>
+    <h1>Welcome, {{ user.username }}</h1>
+</header>
+<main>
+    <section>
+        <h2>Profile Details</h2>
+        <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Date Joined:</strong> {{ user.date_joined }}</p>
+    </section>
+    <section>
+        <h2>Your Booked Flights</h2>
+        {% if flights %}
+            <ul>
+                {% for flight in flights %}
+                    <li>{{ flight.flight_name }} from {{ flight.origin }} to {{ flight.destination }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no booked flights.</p>
+        {% endif %}
+    </section>
+    <section>
+        <a href="{% url 'profile:update_view' %}">UpdateProfile</a>
+    </section>
+</main>
+{% endblock %}

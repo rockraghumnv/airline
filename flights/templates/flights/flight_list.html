@@ -5,7 +5,7 @@
 <li>
     {{flight.id}}--{{flight.flight_name}}
     {{flight.origin}} to {{flight.destination}}
-    <form action="{% url 'flights:book' %}" method="POST" class="book-form">
+    <form action="{% url 'flights:store_flight_id' %}" method="POST" class="book-form">
         {% csrf_token %}
         <input type="hidden" name="flight_id" value="{{ flight.id }}">
         <input type="hidden" name="flight_name" value="{{ flight.flight_name }}">
