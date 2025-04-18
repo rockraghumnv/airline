@@ -1,6 +1,11 @@
 {% extends 'flights/layout.html' %}
 {% block body%}
 <h1>List of all flights</h1>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'profile:profile_view' %}">Go to Profile</a>
+{% endif %}
+
 {% for flight in flights %}
 <li>
     {{flight.id}}--{{flight.flight_name}}

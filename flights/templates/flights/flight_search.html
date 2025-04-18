@@ -1,5 +1,9 @@
 {% extends 'flights/layout.html' %}
 {% block body%}
+
+{% if user.is_authenticated %}
+    <a href="{% url 'profile:profile_view' %}">Go to Profile</a>
+{% endif %}
 <form action="{%url 'flights:flight_search'%}" method="post">
     {% csrf_token %}
     origin: {{Search_form.origin}}

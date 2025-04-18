@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'profiles/layout.html' %}
 
 {% block content %}
 <header>
@@ -16,7 +16,14 @@
         {% if flights %}
             <ul>
                 {% for flight in flights %}
-                    <li>{{ flight.flight_name }} from {{ flight.origin }} to {{ flight.destination }}</li>
+                    <li>
+                        {{ flight.flight_name }} from {{ flight.origin }} to {{ flight.destination }}
+                        <form action="{% url 'profile:cancel_booking'  %}" method="post" style="display:inline;">
+                            <input type="hidden" name="flight_cancel_id" value="{{ flight.id }}">   
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Cancel</button>
+                        </form>
+                    </li>
                 {% endfor %}
             </ul>
         {% else %}
@@ -24,7 +31,7 @@
         {% endif %}
     </section>
     <section>
-        <a href="{% url 'profile:update_view' %}">UpdateProfile</a>
+        <a href="{% url 'profile:update_profile' %}">UpdateProfile</a>
     </section>
 </main>
 {% endblock %}
