@@ -9,7 +9,8 @@
         <h2>Profile Details</h2>
         <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Date Joined:</strong> {{ user.date_joined }}</p>
+        <p><strong>Phone Number:</strong> {{ user.userprofile.phone_number }}</p>
+        <p><img src="/profile/media/profile_photos/default.png" alt="Profile Photo" style="width:150px; height:150px; border-radius:50%;"></p>
     </section>
     <section>
         <h2>Your Booked Flights</h2>

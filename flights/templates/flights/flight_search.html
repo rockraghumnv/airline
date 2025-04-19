@@ -1,5 +1,8 @@
 {% extends 'flights/layout.html' %}
-{% block body%}
+{% load static %}
+{% block body %}
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <script src="{% static 'JS/search.js' %}"></script>
 
 {% if user.is_authenticated %}
     <a href="{% url 'profile:profile_view' %}">Go to Profile</a>
@@ -12,61 +15,5 @@
     <div id="destination-suggestions" class="suggestions-box"></div>
 <input type="submit" value="Search"> </input>
 </form>
-
-<style>
-    .suggestions-box {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        max-height: 150px;
-        overflow-y: auto;
-        position: absolute;
-        z-index: 1000;
-    }
-    .suggestions-box div {
-        padding: 5px;
-        cursor: pointer;
-    }
-    .suggestions-box div:hover {
-        background-color: #e0e0e0;
-    }
-    </style>
-
-<script>
-    document.addEventListener('DOMContentLoaded',() =>{
-        const originInput = document.getElementById('id_origin');
-        const destinationInput = document.getElementById('id_destination');
-
-        const originBox = document.getElementById('origin-suggestions');
-        const destinationBox = document.getElementById('destination-suggestions');
-
-        function handlesuggestions(inputElement,type,suggestionsbox){
-            inputElement.addEventListener('input',() =>{
-               const query = inputElement.value;
-
-               if (query.length > 0) {
-                fetch(`/flights/suggestions/?type=${type}&q=${query}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        suggestionsbox.innerHTML = '';
-                        data.results.forEach(item => {
-                            const div = document.createElement('div');
-                            div.textContent = item;
-                            div.onclick = () => {
-                                inputElement.value = item;
-                                suggestionsbox.innerHTML = '';
-                            };
-                            suggestionsbox.appendChild(div);
-                        });
-                    });
-               }else{
-                suggestionsbox.innerHTML = '';
-               }
-            });
-
-        }
-
-        handlesuggestions(originInput,'origin',originBox)
-        handlesuggestions(destinationInput,'destination',destinationBox)
-    })
-</script>    
+   
 {% endblock %}

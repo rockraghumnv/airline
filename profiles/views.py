@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from flights.models import Flights
 from django.http import HttpResponse
+from .models import UserProfile
 
 
 # Create your views here.
@@ -11,7 +12,8 @@ def profile_view(request):
     flights = Flights.objects.filter(passengers__user=user)  # Retrieve flights associated with the user
     return render(request, 'profiles/profile.html', {
         'message': 'Profile View',
-        'flights': flights
+        'flights': flights,
+        'UserProfile': UserProfile.objects.get(user=user),
     })
 
 def update_profile(request):

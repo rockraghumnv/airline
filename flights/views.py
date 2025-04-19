@@ -65,7 +65,7 @@ def book(request):
 
             try:
                 flight = Flights.objects.get(pk=flight_id)
-
+                
                 if Passengers.objects.filter(user=request.user, flights=flight).exists():
                     return render(request, 'flights/success.html', {"message": "You have already booked this flight."})
 
@@ -93,11 +93,10 @@ def book(request):
 
 def suggestions(request):
      if request.method == "GET":
-          print("sdjnl")
           query = request.GET.get('q')
           dropdown_list = Airport.objects.filter(city__istartswith=query).values_list('city','id').distinct()
           print(dropdown_list)
           if dropdown_list:
                return JsonResponse({'results':list(dropdown_list)})
         
-          return JsonResponse({'results': list(dropdown_list)})
+          return JsonResponse({'results': ["No flights"]})
