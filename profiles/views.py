@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from flights.models import Flights
 from django.http import HttpResponse
-from .models import UserProfile
-
+from .models import UserProfile,cancelled
+from .forms import CancelForm
 
 # Create your views here.
 @login_required(login_url='users:login_redirect')
@@ -22,7 +22,45 @@ def update_profile(request):
 def delete_profile(request):
     pass
 
+@login_required(login_url='users:login_redirect')
 def cancel_booking(request):
+    if request.method == 'POST':
+        form = CancelForm(request.POST)
+        if form.is_valid():
+            # Process the cancellation form
+            reason = form.cleaned_data['reason']
+            flight_id = request.POST.get('flight_id')
+            if flight_id and reason:
+                # Check if a cancellation record already exists for the user
+                if not cancelled.objects.filter(user=request.user).exists():
+                    cancelled.objects.create(
+                        user=request.user,
+                        reason=reason
+                    )
+                else:
+                    return render(request, 'profiles/cancel_booking.html', {
+                        'message': 'You have already cancelled a booking.',
+                        'form': CancelForm(),
+                    })
+                flight = Flights.objects.get(id=flight_id)
+                request.user.flights.remove(flight)
+                flight.passengers.remove(request.user)
+                flight.save()   
+                return render(request, 'profiles/cancel_booking.html', {
+                    'flight_id': flight_id,
+                    'message': 'Booking cancelled successfully!',
+                })
+        else:
+            flight_cancel_id = request.POST.get('flight_cancel_id')
+            if flight_cancel_id:
+                request.session['cancel_booking'] = flight_cancel_id
+                flight = Flights.objects.get(id=flight_cancel_id)  
+                return render(request, 'profiles/cancel_booking.html', {
+                    'form': CancelForm(),
+                    'flights': flight,
+                })
+    # Fallback response to ensure HttpResponse is always returned
     return render(request, 'profiles/cancel_booking.html', {
-        'message': 'Cancel Booking View will be updated soon'
+        'message': 'Invalid request or missing data.',
+        'form': CancelForm(),
     })

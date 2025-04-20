@@ -22,3 +22,11 @@ class UserProfile(models.Model):
             except UserProfile.DoesNotExist:
                 pass
         super().save(*args, **kwargs)
+
+class cancelled(models.Model):
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    reason = models.TextField()
+    date_cancelled = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} Cancelled Profile'
